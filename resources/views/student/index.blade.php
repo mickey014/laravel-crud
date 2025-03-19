@@ -77,9 +77,7 @@
         </div>
     </div>
 
-
-
-    <div class="container py-5">
+    <div class="container pb-5">
         <div class="row mb-2">
             @if (Auth::guard('student')->check())
                 <form action="{{ route('students.logout') }}" method="POST">
