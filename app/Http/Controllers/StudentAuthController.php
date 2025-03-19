@@ -14,11 +14,9 @@ class StudentAuthController extends Controller
 {
     public function showLogin()
     {
-        if ($redirect = $this->check_student_loggedin('student', 'students.index')) {
-            return $redirect; // Stop execution and redirect
-        }
+        $redirect = $this->check_student_loggedin('student', 'students.index');
 
-        return view('student.auth.login');
+        return ($redirect) ? $redirect : view('student.auth.login');
     }
 
     public function login(Request $request)
@@ -66,11 +64,9 @@ class StudentAuthController extends Controller
 
     public function showRegister()
     {
-        if ($redirect = $this->check_student_loggedin('student', 'students.index')) {
-            return $redirect; // Stop execution and redirect
-        }
+        $redirect = $this->check_student_loggedin('student', 'students.index');
 
-        return view('student.auth.signup');
+        return ($redirect) ? $redirect : view('student.auth.signup');
     }
 
     public function register(Request $request)
@@ -114,9 +110,5 @@ class StudentAuthController extends Controller
         if (Auth::guard($guardName)->check()) {
             return redirect()->route($route); // Redirect if already logged in
         }
-
-        // if (Auth::guard('student')->check()) {
-        //     return redirect()->route('students.index'); // Redirect if already logged in
-        // }
     }
 }
