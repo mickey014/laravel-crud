@@ -108,7 +108,7 @@
                         </h4>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered display" id="studentsTable">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -126,6 +126,7 @@
                                     </div>
                                 </td>
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -141,39 +142,50 @@
             get_all_student()
         })
 
+
+
         function get_all_student() {
             $.ajax({
                 type: 'GET',
                 url: "{{ route('students.all') }}",
                 dataType: 'json',
                 success: function(response) {
-                    $('#studentTbody').html('')
+
+                    if ($.fn.DataTable.isDataTable('#studentsTable')) {
+                        $('#studentsTable').DataTable().destroy();
+                    }
+
+                    $('#studentTbody').html('');
+
                     $.each(response.students, function(key, item) {
                         $('#studentTbody').append(`
-                                <tr>
-                                    <th>${item.id}</th>
-                                    <td>${item.name}</td>
-                                    <td>${item.email}</td>
-                                    <td>${item.phone}</td>
-                                    <td>${item.course}</td>
-                                    <td>
-                                        <button 
-                                        class="btn btn-primary btn-sm" 
-                                        onclick="edit_student('${item.id}')"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#editStudentModal">
-                                            Edit
-                                        </button>
-                                        <button class="btn btn-danger btn-sm" onclick="delete_student('${item.id}')">Delete</button>
-                                    </td>
-                                </tr>
-                            `)
-                    })
+                            <tr>
+                                <th>${item.id}</th>
+                                <td>${item.name}</td>
+                                <td>${item.email}</td>
+                                <td>${item.phone}</td>
+                                <td>${item.course}</td>
+                                <td>
+                                    <button 
+                                    class="btn btn-primary btn-sm" 
+                                    onclick="edit_student('${item.id}')"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editStudentModal">
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="delete_student('${item.id}')">Delete</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+
+                    $('#studentsTable').DataTable();
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error:", error)
+                    console.error("Error:", error);
                 },
-            })
+            });
+
         }
 
         function add_student(event) {
@@ -312,8 +324,6 @@
                 }
             });
         }
-
-
 
         function delete_student(studentId) {
             if (!confirm("Are you sure you want to delete this student?")) {
