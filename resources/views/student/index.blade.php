@@ -210,14 +210,14 @@
                 dataType: "json",
                 success: function(response) {
                     clearTimeout(timeoutId);
+                    $('#addStudentMsg').html('')
                     if (response.status === 400) {
-                        $('#addStudentMsg').html('')
+                        
                         $('#addStudentMsg').addClass('alert alert-danger')
                         $.each(response.errors, function(key, err) {
                             $('#addStudentMsg').append(`<p class='m-0'>${err}</p>`)
                         })
                     } else if (response.status === 200) {
-                        $('#addStudentMsg').html('')
                         $('#addStudentMsg').addClass('alert alert-success')
                         $('#addStudentMsg').append(`<p class='m-0'>${response.message}</p>`)
                         get_all_student()
